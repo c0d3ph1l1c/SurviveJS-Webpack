@@ -6,12 +6,12 @@ const glob = require("glob");
 
 const parts = require("./webpack.parts");
 
+const PATHS = {
+    app: path.join(__dirname, "src"),
+};
+
 const commonConfig = merge([
     {
-        entry: {
-            main: './src/index.js',
-            style: glob.sync("./src/**/*.css"),
-        },
         plugins: [
             new HtmlWebpackPlugin({
                 title: "Webpack demo",
@@ -23,6 +23,9 @@ const commonConfig = merge([
 const productionConfig = merge([
     parts.extractCSS({
         use: "css-loader",
+    }),
+    parts.purifyCSS({
+        paths: glob.sync(`${PATHS.app}/**/*.js`, { nodir: true }),
     }),
 ]);
 
